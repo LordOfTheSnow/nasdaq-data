@@ -2,5 +2,5 @@ __pycache__/
 .vscode/
 venv/
 .env
-nasdaq-data.code-workspace
+*.code-workspace
 .nasdaq/

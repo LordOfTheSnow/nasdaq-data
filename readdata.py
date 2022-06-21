@@ -22,8 +22,12 @@ def main():
 
     # load environment variables
     load_dotenv()
-    ticker_symbol=os.environ.get("datafile", default=".data")
+    # read InfluxDB config values from file ".env"
+    influxServer=os.environ.get('influxServer')
+    influxPort=os.environ.get("influxPort", default=8086)
+    influxDbName=os.environ.get("influxDbName", default="nasdaq")
 
+    # parse command line arguments    
     parser = ArgumentParser()
     parser.add_argument("symbol", 
                         help="Ticker symbol (==Nasdaq Data Link Code), e.g. OPEC/ORB for OPEC Crude Oil)")
@@ -38,10 +42,6 @@ def main():
     args = parser.parse_args()
     data_link_log.debug(f"symbol: {args.symbol}")
 
-    # read InfluxDB config values from file ".env"
-    influxServer=os.environ.get('influxServer')
-    influxPort=os.environ.get("influxPort", default=8086)
-    influxDbName=os.environ.get("influxDbName", default="nasdaq")
 
     # create an influxDBClient
     influxDbClient = InfluxDBClient(host=influxServer, port=influxPort)
@@ -63,9 +63,8 @@ def main():
         end_date = args.end_date
     data_link_log.debug(f"end_date (set): {end_date}")
 
-    # get the data
+    # read the data
     data = nasdaqdatalink.Dataset(args.symbol).data(params={ 'start_date':start_date, 'end_date':end_date})
-
     if data:
         df = data.to_pandas()
         print(df.head())
