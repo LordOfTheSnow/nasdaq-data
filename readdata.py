@@ -56,10 +56,10 @@ def main():
     data_link_log.debug(f"start_date (calculated): {start_date}")
     data_link_log.debug(f"end_date (calculated): {end_date}")
 
-    if args.start_date and (args.start_date != "today"):
+    if args.start_date:
         start_date = args.start_date
     data_link_log.debug(f"start_date (set): {start_date}")
-    if args.end_date and (args.end_date != "today"):
+    if args.end_date:
         end_date = args.end_date
     data_link_log.debug(f"end_date (set): {end_date}")
 
