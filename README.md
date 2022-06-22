@@ -79,7 +79,7 @@ Examples
 
 Run 
 ```
-python bot.py -h
+python readdata.py -h
 ```
 for a help page
 
