@@ -68,6 +68,7 @@ Use shorter values for the _duration_ and _shard duration_ if you want to. (The 
 
 ```
 python readdata.py SYMBOL --start_date YYYY-MM-DD --end_date YYYY-MM-DD --do_not_write
+python readdata.py SYMBOL --start_date -2 --end_date -1 --do_not_write
 ```
 
 _SYMBOL_ has to be a Nasdaq Data Link ticker symbol. You can find the symbol in the upper right corner of the webpage that is displaying that symbol's data. 
@@ -85,11 +86,23 @@ for a help page
 
 Options starting with a _-_ or _--_ are optional and can be omitted.
 
-If `--start_date` and/or `--end_date` are omitted, the current day will be taken.
+If `--start_date` and/or `--end_date` are omitted, the current day will be taken. If a negative offset (e.g. `-1`) is given, the current date minus that number of days will be taken (e.g. -1 day)
 
 If `--do_not_write` is given, no values are written to the database
 
+#### Run via periodically via cron
 
+If you want to run this script periodically via cron, you can call the wrapper script **cronscript.sh** (rename the provided `cronscript.sh.example` to `cronscript.sh` so that local changes will not be overwritten with next git pull).
+
+8. Set execute permissions for the script: `chmod ug+x cronscript.sh`
+9. Call `crontab -e` to edit the cron table (crontab), e.g.:
+
+```
+# m h  dom mon dow   command
+0 1 1 * * /home/pi/src/nasdaq/cronscript.sh
+```
+This will run the command at 01:00h local time on every first day of every month. Edit the path to the script to wherever you put it. 
+The script assumes you have a Python virtual environment created with `python3 -m venv venv` in the same directory where you checked out the repository. The script will activate the virtual environment, call the Python interpreter with the script and will deactivate the virtual environment then.
 
 ### Files and data created
 
@@ -120,4 +133,9 @@ In the current implementation, the timestamp will always be at 0:00 local time a
 
 ## History
 
-* 21-Jun-2021: made repository public
+* 24-Jun-2021
+  * added possibilty to use offsets for the `start_date` and `end_date` parameters. You can now use `--start_date -2` to set the start date to the current date - 2 days.
+  * added example file _cronscript.sh.example_ to run this script in a Python virtual environment via cron
+
+* 21-Jun-2021
+  * made repository public

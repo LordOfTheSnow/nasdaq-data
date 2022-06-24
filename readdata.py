@@ -5,7 +5,7 @@ import logging
 import nasdaqdatalink
 from dotenv import load_dotenv
 from argparse import ArgumentParser
-from datetime import datetime
+from datetime import datetime, timedelta
 from influx18 import *
 
 def main():
@@ -32,9 +32,9 @@ def main():
     parser.add_argument("symbol", 
                         help="Ticker symbol (==Nasdaq Data Link Code), e.g. OPEC/ORB for OPEC Crude Oil)")
     parser.add_argument("-sd", "--start_date", 
-                        help="start date for the values to be received. Format: 'YYYY-MM-DD'")
+                        help="start date for the values to be received. Format: 'YYYY-MM-DD' or a negative offset (e.g. -1 = -1 day)")
     parser.add_argument("-ed", "--end_date", 
-                        help="end date for the values to be received. Format: 'YYYY-MM-DD'")
+                        help="end date for the values to be received. Format: 'YYYY-MM-DD' or a negative offset (e.g. -1 = -1 day)")
     parser.add_argument("-dnw", "--do_not_write", action='store_true',
                         help="do not write values to database")
 
@@ -51,17 +51,26 @@ def main():
     # get start and end date
     # first get the current date
     utcnow = datetime.utcnow()
-    start_date = utcnow.strftime("%Y-%m-%d")
-    end_date = utcnow.strftime("%Y-%m-%d")
-    data_link_log.debug(f"start_date (calculated): {start_date}")
-    data_link_log.debug(f"end_date (calculated): {end_date}")
 
     if args.start_date:
-        start_date = args.start_date
-    data_link_log.debug(f"start_date (set): {start_date}")
+        if str(args.start_date).startswith("-"):
+            start_date_ts = utcnow + timedelta(days=int(args.start_date))
+            start_date = start_date_ts.strftime("%Y-%m-%d")
+        else:
+            start_date = args.start_date
+    else:
+        start_date = utcnow.strftime("%Y-%m-%d")
+    data_link_log.debug(f"start_date: {start_date}")
+
     if args.end_date:
-        end_date = args.end_date
-    data_link_log.debug(f"end_date (set): {end_date}")
+        if str(args.end_date).startswith("-"):
+            end_date_ts = utcnow + timedelta(days=int(args.end_date))
+            end_date = end_date_ts.strftime("%Y-%m-%d")
+        else:
+            end_date = args.end_date
+    else:
+        end_date = utcnow.strftime("%Y-%m-%d")
+    data_link_log.debug(f"end_date: {end_date}")
 
     # read the data
     data = nasdaqdatalink.Dataset(args.symbol).data(params={ 'start_date':start_date, 'end_date':end_date})

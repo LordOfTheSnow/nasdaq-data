@@ -1,0 +1,7 @@
+#!/bin/bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd $SCRIPT_DIR
+source venv/bin/activate
+python readdata.py OPEC/ORB --start_date -1
+python readdata.py BOE/XUDLERD --start_date -2
+deactivate
