@@ -44,6 +44,15 @@ Version 1.0 of this script has been hacked together more or less quick and dirty
 6. Create a file `.nasdaq/data_link_apikey` and put in the plain API key you obtained at https://data.nasdaq.com
 7. Create a file _.env_ and put in the configuration values
 
+Hint: If you see this error message (I got this on my Raspberry Pi (32 Bit) that still uses Python 3.7) when installing the need python modules in step 5
+
+> No matching distribution found for numpy==1.22.4 (from -r requirements.txt (line 4))
+
+install pandas by hand (in your virtual environment):
+
+```
+pip install pandas
+```
 
 #### Configuration values (.env)
 
@@ -99,9 +108,9 @@ If you want to run this script periodically via cron, you can call the wrapper s
 
 ```
 # m h  dom mon dow   command
-0 1 1 * * /home/pi/src/nasdaq/cronscript.sh
+30 14 * * * /home/pi/src/nasdaq-data/cronscript.sh
 ```
-This will run the command at 01:00h local time on every first day of every month. Edit the path to the script to wherever you put it. 
+This will run the command at 14:34h local time on every day. Edit the path to the script to wherever you put it. 
 The script assumes you have a Python virtual environment created with `python3 -m venv venv` in the same directory where you checked out the repository. The script will activate the virtual environment, call the Python interpreter with the script and will deactivate the virtual environment then.
 
 ### Files and data created
