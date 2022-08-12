@@ -44,7 +44,7 @@ Version 1.0 of this script has been hacked together more or less quick and dirty
 6. Create a file `.nasdaq/data_link_apikey` and put in the plain API key you obtained at https://data.nasdaq.com
 7. Create a file _.env_ and put in the configuration values
 
-Hint: If you see this error message (I got this on my Raspberry Pi (32 Bit) that still uses Python 3.7) when installing the need python modules in step 5
+Hint: If you see this error message (I got this on my Raspberry Pi (32 Bit) that still uses Python 3.7) when installing the needed python modules in step 5
 
 > No matching distribution found for numpy==1.22.4 (from -r requirements.txt (line 4))
 
