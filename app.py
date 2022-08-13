@@ -105,19 +105,7 @@ def main():
             bucket += "/" + influxRetentionPolicy
 
         with InfluxDBClient(url=influxUrl, org='-') as influxDbClient:
-            if data:
-                df = data.to_pandas()
-                print(df.head())
-                if not args.do_not_write:
-                    for index, row in df.iterrows():
-                        dataPoint = DataPoint(args.symbol,index, row['Value'])
-                        # data_link_log.debug(f"date: {index}")
-                        # data_link_log.debug(f"dataPoint: {dataPoint.date}, {dataPoint.price}")
-                        writeInfluxDBPoint(influxDbClient, bucket, dataPoint)  
-                else:
-                    data_link_log.info("--do_not_write specified, no data written to database")  
-            else:
-                data_link_log.info(f"no data between {start_date} - {end_date}")
+            handleData(log=data_link_log, data=data, args=args, influxDbClient=influxDbClient, influxBucket=influxBucket, start_date=start_date, end_date=end_date)
 
     elif influxVersion == "2":
         if (not (influxUrl and influxToken and influxBucket)):
@@ -125,20 +113,24 @@ def main():
             sys.exit("InfluxDB configuration parameters are missing. Program terminated. See log file for details.")
 
         with InfluxDBClient(url=influxUrl, token=influxToken, org=influxOrg) as influxDbClient:
-            if data:
-                df = data.to_pandas()
-                print(df.head())
-                if not args.do_not_write:
-                    for index, row in df.iterrows():
-                        dataPoint = DataPoint(args.symbol,index, row['Value'])
-                        # data_link_log.debug(f"date: {index}")
-                        # data_link_log.debug(f"dataPoint: {dataPoint.date}, {dataPoint.price}")
-                        writeInfluxDBPoint(influxDbClient, influxBucket, dataPoint)  
-                else:
-                    data_link_log.info("--do_not_write specified, no data written to database")  
-            else:
-                data_link_log.info(f"no data between {start_date} - {end_date}")
+            handleData(log=data_link_log, data=data, args=args, influxDbClient=influxDbClient, influxBucket=influxBucket, start_date=start_date, end_date=end_date)
 
+
+# helper function because it is repeated for either InfluxDB 1.8 and 2
+def handleData(log, data, args, influxDbClient, influxBucket, start_date, end_date):
+    if data:
+        df = data.to_pandas()
+        # print(df.head())
+        if not args.do_not_write:
+            for index, row in df.iterrows():
+                dataPoint = DataPoint(args.symbol,index, row['Value'])
+                # log.debug(f"date: {index}")
+                # log.debug(f"dataPoint: {dataPoint.date}, {dataPoint.price}")
+                writeInfluxDBPoint(influxDbClient, influxBucket, dataPoint)  
+        else:
+            log.info("--do_not_write specified, no data written to database")  
+    else:
+        log.info(f"no data between {start_date} - {end_date}")
 
 
 if __name__ == '__main__':
