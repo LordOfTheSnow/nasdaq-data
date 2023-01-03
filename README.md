@@ -10,7 +10,7 @@
 
 A (more or less) simple script that reads data from the Nasdaq Data Link / Quandl API and stores it in an InfluxDB.
 
-You need a free API key from https://data.nasdaq.com. They do have a few free services that you can access with this key. However, what I am currently experiencing is that (at least with the data that I am looking for, the data is not really up to date).
+You need a free API key from https://data.nasdaq.com. They do have a few free services that you can access with this key. However, what I am currently experiencing is that (at least with the data that I am looking for) the data is not really up to date.
 
 I have a Grafana dashboard that this displays the current fuel prices and I would like to set them in relation to the current oil price - and since I am living in Europe - multiply that with the US$/EUR exchange rate. Nasdaq provides daily (that means: once per day) oil and echange rate prices/values. 
 
@@ -66,7 +66,7 @@ pip install pandas
 
 There are various methods in InfluxDB 2 to read configuration values. I decided to stick with the .env file file because it is also possible to set the config values for InfluxDB 2 via environment variables and they will still be read with by the dotenv-python package - so it's up to you if you set those values in the .env file or as enviroment variables.
 
-The configuration values for accessing InfluxDB 1.8 must be set in the .env file, they are **not* read from the environment. **Note the slight changes for release V2 below!**
+The configuration values for accessing InfluxDB 1.8 must be set in the .env file, they are **not** read from the environment. **Note the slight changes for release V2 below!**
 
 * loglevel = logging.INFO - set to one of the values listed under https://docs.python.org/3/library/logging.html#levels
 
@@ -90,7 +90,7 @@ The InfluxDB server and the database or bucket ("stockdata" in this example) hav
 
 Use shorter values for the _duration_ and _shard duration_ if you want to. (The _duration_ values will determine how long the data will be stored until it will be automatically removed.)
 
-If you use InfluxDB 2, use the Influx GUI to set up your organzination, bucket and token.
+If you use InfluxDB 2, use the Influx GUI to set up your organiznation, bucket and token.
 
 
 ### Usage 
@@ -168,7 +168,7 @@ In the current implementation, the timestamp will always be at 0:00 local time a
 
 * 03-Jan-2023
   * V2.0.1: updated requirements.txt due to security issue in certifi
-  
+
 * 14-Aug-2022
   * Released V2.0 which can also handle Influx DB 2.x 
 
