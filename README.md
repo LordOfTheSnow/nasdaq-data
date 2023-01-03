@@ -166,6 +166,9 @@ In the current implementation, the timestamp will always be at 0:00 local time a
 
 ## History
 
+* 03-Jan-2023
+  * V2.0.1: updated requirements.txt due to security issue in certifi
+  
 * 14-Aug-2022
   * Released V2.0 which can also handle Influx DB 2.x 
 

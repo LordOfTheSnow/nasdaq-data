@@ -60,7 +60,6 @@ def main():
     parser.add_argument("-dnw", "--do_not_write", action='store_true',
                         help="do not write values to database")
 
-    parser.add_argument                        
     args = parser.parse_args()
     data_link_log.debug(f"symbol: {args.symbol}")
 
@@ -91,7 +90,6 @@ def main():
     # read the data
     data = nasdaqdatalink.Dataset(args.symbol).data(params={ 'start_date':start_date, 'end_date':end_date})
 
-
     if influxVersion == "1":
         if (not (influxUrl and influxDbName)):
             logging.exception("InfluxDB configuration parameters are missing. Program terminated.")
@@ -120,7 +118,7 @@ def main():
 def handleData(log, data, args, influxDbClient, influxBucket, start_date, end_date):
     if data:
         df = data.to_pandas()
-        # print(df.head())
+        log.debug(f"df.head():\n{df.head()}")
         if not args.do_not_write:
             for index, row in df.iterrows():
                 dataPoint = DataPoint(args.symbol,index, row['Value'])
